@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from .models import Contact,Product, Orders, OrderUpdate
 from django.contrib import messages
 from math import ceil
-from .import keys
+
 # Create your views here.
 def index(request):
     allProds=[]
@@ -28,6 +28,8 @@ def contact(request):
         return render(request,'contact.html')
     return render(request,'contact.html')    
 
+def checkout(request):
+    return render(request,'confirmation.html')
 
 
 def checkout(request):
@@ -51,27 +53,45 @@ def checkout(request):
         update = OrderUpdate(order_id=Order.order_id,update_desc="the order has been placed")
         update.save()
         thank = True
+        messages.success(request,'Thankyou for shopping . Your order has been placed')
         # # PAYMENT INTEGRATION
 
-        id = Order.order_id
-        oid=str(id)+"ShopyCart"
-        param_dict = {
+        # id = Order.order_id
+        # oid=str(id)+"ShopyCart"
+        # param_dict = {
 
-            'MID':keys.MID,
-            'ORDER_ID': oid,
-            'TXN_AMOUNT': str(amount),
-            'CUST_ID': email,
-            'INDUSTRY_TYPE_ID': 'Retail',
-            'WEBSITE': 'WEBSTAGING',
-            'CHANNEL_ID': 'WEB',
-            'CALLBACK_URL': 'http://127.0.0.1:8000/handlerequest/',
+        #     'MID':keys.MID,
+        #     'ORDER_ID': oid,
+        #     'TXN_AMOUNT': str(amount),
+        #     'CUST_ID': email,
+        #     'INDUSTRY_TYPE_ID': 'Retail',
+        #     'WEBSITE': 'WEBSTAGING',
+        #     'CHANNEL_ID': 'WEB',
+        #     'CALLBACK_URL': 'http://127.0.0.1:8000/handlerequest/',
 
-        }
-        param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
-        return render(request, 'paytm.html', {'param_dict': param_dict})
+        # }
+        # param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
+        # return render(request, 'paytm.html', {'param_dict': param_dict})
 
      return render(request, 'checkout.html')
 
 def about(request):
-    return render(request,'about.html')    
-    
+    return render(request,'about.html')  
+
+
+def profile(request):
+    if not request.user.is_authenticated:
+        messages.warning(request,"Login & Try Again")
+        return redirect('/registration/login')
+    currentuser=request.user.username
+    items=Orders.objects.filter(email=currentuser)
+    for i in items:
+        print(i.name)
+    #     status=OrderUpdate.objects.filter(order_id=int(myid))
+    # for j in status:
+    #     print(j.update_desc)
+
+   
+    context ={"items":items,}
+    # print(currentuser)
+    return render(request,"profile.html",context)     
