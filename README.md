@@ -1,5 +1,6 @@
 # InfYCart
- https://github.com/Pratigyavlog/InfiCart/assets/62683038/b6e5aa21-1058-419a-92af-47c5f6b9f499
+
+https://github.com/Pratigyavlog/InfYCart/assets/62683038/252422c4-b11f-45f5-bd99-dede0a2a6b70
 
 Infy Cart stands out with its feature-rich functionality, secure authentication, and visually appealing, responsive design, all powered by a tech stack that ensures a seamless and user-friendly online shopping experience.
  Technology Stack:
